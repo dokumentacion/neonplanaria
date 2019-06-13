@@ -37,6 +37,16 @@ body {
 .cover-main p {
   font-size: 11px;
 }
+section.cover .cover-main>p:last-child a {
+  background: rgba(0,0,0,0.8);
+  color: white;
+  margin: 3px;
+  padding: 2px 10px !important;
+  border-radius: 2px !important;
+  color: white !important;
+  font-size: 10px !important;
+  font-family: arial !important;
+}
 section.cover.has-mask .mask {
   background: none !important;
 }
