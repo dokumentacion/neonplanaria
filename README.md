@@ -35,7 +35,7 @@ Neon Planaria is as minimal and as easy as it can get.
 
 No hassle to set up containers, no hassle to worry about ports and firewalls.
 
-No requirement to set up a whole infrastructure and download hundreds of gigabytes of blockchain to do anything. (Of course, it also gives the option to plug in a Bitcoin full node later if needed)
+No requirement to set up a whole infrastructure and download hundreds of gigabytes of blockchain to do anything, thanks to built-in [Bitbus support](https://bitbus.network). (Of course, it also gives the option to plug in a Bitcoin full node later if needed)
 
 > **It's literally a single node.js app.** 
 
