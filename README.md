@@ -281,15 +281,16 @@ planaria.start({
     *********************************************************************/
   },
   onblock: async function(e) {
-    /*********************************************************************
+    /**************************************************************************************
     *
     *   Called whenever there's a new block.
     *   Includes an "e" payload with child attributes:
     *   - height: current block height
-    *   - tx: an array of all filtered transaction objects in TXO format
+    *   - mem: a snapshot array of all filtered mempool transaction objects in TXO format
+    *   - tx: an array of all filtered block transaction objects in TXO format
     *   - tape: current state machine status, represented as "tape"
     *
-    *********************************************************************/
+    **************************************************************************************/
   }
 })
 ```
@@ -308,7 +309,8 @@ planaria.start({
       - `start`: the block height from which the current app started processing from. This would be the first line of the `tape.txt` file in youre execution environment.
       - `end`: the last block height which was successfully processed by Planaria.
 - `onblock`:
-  - `tx`: An array of [TXO representation](https://github.com/interplanaria/txo) of the incoming bitcoin transaction.
+  - `mem`: An array of [TXO representation](https://github.com/interplanaria/txo) of relevant mempool transactions snapshot.
+  - `tx`: An array of [TXO representation](https://github.com/interplanaria/txo) of relevant incoming transactions in the block.
   - `tape`: [tape](#tape) object that represents the current processing status.
     - `src`: the source tape
       - `start`: the source tape start point. If using Bitbus, it will be the first block from which the bitbus node started synchronizing.
