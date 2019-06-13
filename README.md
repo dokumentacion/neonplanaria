@@ -385,6 +385,37 @@ planarium.start({
 })
 ```
 
+### Attributes
+
+- `name`: name of the API endpoint, this will show up as the title of the API explorer UI.
+- `port`: port to use to serve HTTP
+- `onstart`: initialization step. If you need to initialize certain engines such as DB, initialize here, and return as return value, and it will be available inside `onquery` as `e.core` attribute.
+- `onquery`: [expressjs GET route handler](https://expressjs.com/en/starter/basic-routing.html) for the path: `/q/:query`. See above code comment for details.
+- `custom`: Override express.js `app` object. Not only can you attach more `GET` routes, but you can aleven attach `POST` requests to submit ANYTHING. As for **what** you can submit, use your imagination...
+
+### Customization
+
+You can attach more endpoints through `custom()`.
+
+This means you now can even POST things, such as uploading content, etc.
+
+```
+const express = require('express')
+const { planarium } = require('neonplanaria')
+planarium.start({
+  ...
+  custom: function (e) {
+    e.app.use(express.json());
+    e.app.post('/broadcast', (req, res) {
+      // do something with:
+      // req.body
+    })
+  },
+  ...
+})
+```
+
+
 ---
 
 # Tutorial
