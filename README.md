@@ -263,6 +263,10 @@ planaria.start({
     from: [BLOCK HEIGHT TO PROCESS FROM],
     q: [BITQUERY FILTER]
   },
+  src: {
+  	from: [BLOCK HEIGHT TO PROCESS FROM],
+  	path: [EXISTING BITBUS PATH]
+  },
   onstart: function(e) {
     /*********************************************************************
     *
@@ -295,9 +299,12 @@ planaria.start({
 })
 ```
 
-- `filter`: The Bitquery filter to filterr all raw transactions before triggering `onmempool` or `onblock`.
+- `filter`: The Bitquery filter to filterr all raw transactions before triggering `onmempool` or `onblock`. You may use either `filter` to spin up a new Bitbus node, or may use the `src` attribute (explained below) to connect to an existing Bitbus node.
   - `from`
   - `q`: A subsiet of [Bitquery](https://docs.planaria.network/#/query?id=q) to filter the incoming events. 
+- `src`: Often you may want to run multiple Planaria machines using a single Bitbus. In this case you may first start a Bitbus node, and then use this `src` attribute to connect to the Bitbus instance. You may use this feature to connect to an existing Bitbus node, but also use the `filter` attribute above to start a single Bitbus node and directly connect to it.
+  - `from`: The block height to process from
+  - `path`: The bitbus path in the file system
 - `onstart`: called whenever the app starts. You can initialize anything you want in here.
 - `onmempool`: called whenever there's a new mempool transaction. The callback payload `e` has the following attributes:
   - `tx`: [TXO representation](https://github.com/interplanaria/txo) of the incoming bitcoin transaction.
@@ -1014,6 +1021,54 @@ When you open the explorer at `/query` and try the query, you'll get something l
 
 
 ---
+
+## Multiplexing
+
+What if you want to build multiple Planaria state machines from one Bitbus? Do you have to set up one bitbus per planaria?
+
+When you want to build 10 different Planaria machines, a naive option is to spin up 10 Planaria nodes, each of which spins up a new Bitbus node of its own.
+
+![Before](Beforemulti.png)
+
+You would do this by using the default `filter` attribute:
+
+```
+planaria.start({
+  filter: {
+    from: [BLOCK HEIGHT TO PROCESS FROM],
+    q: [BITQUERY FILTER]
+  },
+  ...
+})
+```
+
+This will set up a new Bitbus for the Planaria instance automatically.
+
+However, when you want to run multiple Planaria apps simultaneously, that would be inefficient because each bitbus will make redundant synchronization request, wasting traffic.
+
+Instead, you can:
+
+1. Spin up one generic Bitbus (for example, with a filter of `find: {}`)
+2. Connect multiple Planaria machines directly to this single Bitbus.
+
+![After](Aftermulti.png)
+
+Here's what the code may look like (assuming that we're running a Bitbus node from the current folder):
+
+```
+planaria.start({
+  src: {
+  	from: 570000,
+  	path: process.cwd()
+  },
+  ...
+})
+```
+
+You can run many of these apps simultaneously and, thanks to the robust file-based communication, all X Planaria state machines will run independently by feeding off of the stream from the single Bitbus.
+
+---
+
 
 ## Manipulating Time
 
