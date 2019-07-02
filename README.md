@@ -267,6 +267,7 @@ planaria.start({
   	from: [BLOCK HEIGHT TO PROCESS FROM],
   	path: [EXISTING BITBUS PATH]
   },
+  queue: [Queue Initiazliation Config],
   onstart: function(e) {
     /*********************************************************************
     *
@@ -305,6 +306,7 @@ planaria.start({
 - `src`: Often you may want to run multiple Planaria machines using a single Bitbus. In this case you may first start a Bitbus node, and then use this `src` attribute to connect to the Bitbus instance. You may use this feature to connect to an existing Bitbus node, but also use the `filter` attribute above to start a single Bitbus node and directly connect to it.
   - `from`: The block height to process from
   - `path`: The bitbus path in the file system
+- `queue`: Queue initialization config. The second argument of the [better-queue constructor function](https://github.com/diamondio/better-queue/blob/master/README.md#new-queueprocess-options), including `concurrent`, `maxRetries`, etc.
 - `onstart`: called whenever the app starts. You can initialize anything you want in here.
 - `onmempool`: called whenever there's a new mempool transaction. The callback payload `e` has the following attributes:
   - `tx`: [TXO representation](https://github.com/interplanaria/txo) of the incoming bitcoin transaction.
