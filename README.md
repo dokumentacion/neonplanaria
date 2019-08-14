@@ -261,12 +261,15 @@ const { planaria } = require("neonplanaria")
 planaria.start({
   filter: {
     from: [BLOCK HEIGHT TO PROCESS FROM],
-    q: [BITQUERY FILTER]
+    host: [BITBUS HOST DEFINITION],
+    q: [BITQUERY FILTER],
+    l: [LOCAL FILTER]
   },
   src: {
   	from: [BLOCK HEIGHT TO PROCESS FROM],
   	path: [EXISTING BITBUS PATH]
   },
+  tape: [TAPE DESTINATION PATH],
   queue: [Queue Initiazliation Config],
   onstart: function(e) {
     /*********************************************************************
@@ -301,11 +304,16 @@ planaria.start({
 ```
 
 - `filter`: The Bitquery filter to filterr all raw transactions before triggering `onmempool` or `onblock`. You may use either `filter` to spin up a new Bitbus node, or may use the `src` attribute (explained below) to connect to an existing Bitbus node.
-  - `from`
+  - `from`: The block height to process from
+  - `host`: The source Bitbus host node definition
+    - `bitbus`: By default this is `https://bitbus.network`, but you can customize this to connect to custom nodes. For example `"bitbus": "https://bob.bitbus.network"`. [Learn more](https://bitbus.network/docs#/?id=syntax)
   - `q`: A subsiet of [Bitquery](https://docs.planaria.network/#/query?id=q) to filter the incoming events. 
+  - `l`: The same [local filter supported by Bitbus](https://bitbus.network/docs#/?id=_2-advanced-bus). (Optional)
+    - `map`: a JavaScript function to transform all incoming transaction events BEFORE storing to Bitbus. By attaching this function you store the pre-processed data in Bitbus. Then this data gets fed to you via Neon Planaria. [Learn more](https://bitbus.network/docs#/?id=_2-advanced-bus)
 - `src`: Often you may want to run multiple Planaria machines using a single Bitbus. In this case you may first start a Bitbus node, and then use this `src` attribute to connect to the Bitbus instance. You may use this feature to connect to an existing Bitbus node, but also use the `filter` attribute above to start a single Bitbus node and directly connect to it.
   - `from`: The block height to process from
   - `path`: The bitbus path in the file system
+- `tape`: Sometimes you may want to customize the path to which you'll store the `tape.txt` file to keep track of progress. By default this is set ad the current directory, but you can customize it with this attribute. **NOTE: By default Neon Planaria auto-creates its "bus" folder at the current execution path, but if you set the "tape" attribute, it will generate both the "tape.txt" for Neon Planaria AND the "bus" folder at the specified path.**
 - `queue`: Queue initialization config. The second argument of the [better-queue constructor function](https://github.com/diamondio/better-queue/blob/master/README.md#new-queueprocess-options), including `concurrent`, `maxRetries`, etc.
 - `onstart`: called whenever the app starts. You can initialize anything you want in here.
 - `onmempool`: called whenever there's a new mempool transaction. The callback payload `e` has the following attributes:
@@ -1060,14 +1068,36 @@ Here's what the code may look like (assuming that we're running a Bitbus node fr
 ```
 planaria.start({
   src: {
-  	from: 570000,
-  	path: process.cwd()
+    from: 570000,
+    path: process.cwd()
   },
   ...
 })
 ```
 
 You can run many of these apps simultaneously and, thanks to the robust file-based communication, all X Planaria state machines will run independently by feeding off of the stream from the single Bitbus.
+
+---
+
+## Custom Path
+
+You can customize the folder where you'll store the `tape.txt` as well as the internal `bus` folder IF you're creating a new Bitbus from scratch, specific for the state machine (You can also feed Neon Planaria from [existing Bitbus](#multiplexing))
+
+
+```
+planaria.start({
+  ...
+  tape: "/mnt/vol_atlantis0_1/neon",
+  ...
+})
+```
+
+Above code (WITHOUT "src") will:
+
+1. Create `tape.txt` file at `/mnt/vol_atlantis0_1/neon/tape.txt`.
+2. Creates bitbus folder at `/mnt/vol_atlantis0_1/neon/bus`
+
+> Of course, if you set `src`, this means you're sourcing Bitbus from an exising bus folder, so ONLY the `tape.txt` file will be stored at that location.
 
 ---
 
