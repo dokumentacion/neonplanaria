@@ -1097,7 +1097,7 @@ Above code (WITHOUT "src") will:
 1. Create `tape.txt` file at `/mnt/vol_atlantis0_1/neon/tape.txt`.
 2. Create a bitbus root folder at `/mnt/vol_atlantis0_1/neon/bus`
 
-> Of course, if you set `src`, this means you're sourcing Bitbus from an exising bus folder, so ONLY the `tape.txt` file will be stored at that location.
+> Of course, if you set `src`, this means you're sourcing Bitbus from an existing bus folder, so ONLY the `tape.txt` file will be stored at that location.
 
 ---
 
