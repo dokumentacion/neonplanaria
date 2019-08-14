@@ -1095,9 +1095,104 @@ planaria.start({
 Above code (WITHOUT "src") will:
 
 1. Create `tape.txt` file at `/mnt/vol_atlantis0_1/neon/tape.txt`.
-2. Creates bitbus folder at `/mnt/vol_atlantis0_1/neon/bus`
+2. Create a bitbus root folder at `/mnt/vol_atlantis0_1/neon/bus`
 
 > Of course, if you set `src`, this means you're sourcing Bitbus from an exising bus folder, so ONLY the `tape.txt` file will be stored at that location.
+
+---
+
+## Advanced Bitbus Usage
+
+### 1. Connect to Custom Bitbus Source
+
+Use the `src` attribute to specify which bus to connect to.
+
+```
+planaria.start({
+  src: {
+    from: 595000,
+    path: "/Users/e/Documents/Projects/scratchpad/bitbusdemo/bus/9ccec19b2e72ffa45a596a590    391f7a97a2b6d0807c6b18e39d6ccffa8916ea0",
+  },
+  filter: {
+    ...
+  },
+})
+```
+
+### 2. Create Planaria-specific Bitbus from Scratch
+
+Use the `filter` attribute to create a Bitbus from scratch, and connect to it.
+
+You can even use `host.bitbus` to customize the Bitbus host node service to connect to.
+
+```
+planaria.start({
+  filter: {
+    "host": {
+      "bitbus": "https://bob.bitbus.network"
+    },
+    "from": 595200,
+    "q": {
+      "find": { "out.tape.cell.s": "1LtyME6b5AnMopQrBPLk4FGN8UBuhxKqrn" },
+      "project": { "out.tape.cell.s": 1 }
+    }
+  }
+})
+```
+
+
+### 3. Advanced Bitbus Map Function
+
+You can use the [l.map](https://bitbus.network/docs#/?id=_2-advanced-bus) function to transform incoming events BEFORE storing to Bitbus. Neon Planaria will then consume the transformed data from Bitbus.
+
+> Pay attention to the "l.map" part below
+
+```
+planaria.start({
+  filter: {
+    "host": {
+      "bitbus": "https://bob.bitbus.network"
+    },
+    "from": 595200,
+    "q": {
+      "find": { "out.tape.cell.s": "1LtyME6b5AnMopQrBPLk4FGN8UBuhxKqrn" },
+      "project": { "out.tape.cell.s": 1 }
+    },
+    "l": {
+      "map": (tx) => {
+        return tx.out[0].tape[1].cell[2].s
+      }
+    }
+  },
+})
+```
+
+### 4. Map Function
+
+You can use the [l.map](https://bitbus.network/docs#/?id=_2-advanced-bus) function to transform incoming events BEFORE storing to Bitbus. Neon Planaria will then consume the transformed data from Bitbus.
+
+> Pay attention to the "l.map" part below
+
+```
+planaria.start({
+  filter: {
+    "host": {
+      "bitbus": "https://bob.bitbus.network"
+    },
+    "from": 595200,
+    "q": {
+      "find": { "out.tape.cell.s": "1LtyME6b5AnMopQrBPLk4FGN8UBuhxKqrn" },
+      "project": { "out.tape.cell.s": 1 }
+    },
+    "l": {
+      "map": (tx) => {
+        return tx.out[0].tape[1].cell[2].s
+      }
+    }
+  },
+})
+```
+
 
 ---
 
