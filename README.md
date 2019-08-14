@@ -1167,32 +1167,6 @@ planaria.start({
 })
 ```
 
-### 4. Map Function
-
-You can use the [l.map](https://bitbus.network/docs#/?id=_2-advanced-bus) function to transform incoming events BEFORE storing to Bitbus. Neon Planaria will then consume the transformed data from Bitbus.
-
-> Pay attention to the "l.map" part below
-
-```
-planaria.start({
-  filter: {
-    "host": {
-      "bitbus": "https://bob.bitbus.network"
-    },
-    "from": 595200,
-    "q": {
-      "find": { "out.tape.cell.s": "1LtyME6b5AnMopQrBPLk4FGN8UBuhxKqrn" },
-      "project": { "out.tape.cell.s": 1 }
-    },
-    "l": {
-      "map": (tx) => {
-        return tx.out[0].tape[1].cell[2].s
-      }
-    }
-  },
-})
-```
-
 
 ---
 
