@@ -1105,13 +1105,13 @@ Above code (WITHOUT "src") will:
 
 ### 1. Connect to Custom Bitbus Source
 
-Use the `src` attribute to specify which bus to connect to.
+Use `src` to specify which bus to connect to.
 
 ```
 planaria.start({
   src: {
     from: 595000,
-    path: "/Users/e/Documents/Projects/scratchpad/bitbusdemo/bus/9ccec19b2e72ffa45a596a590    391f7a97a2b6d0807c6b18e39d6ccffa8916ea0",
+    path: "/mnt/vol_atlantis0_1/bitbus/bus/9ccec19b2e72ffa45a596a590391f7a97a2b6d0807c6b18e39d6ccffa8916ea0",
   },
   filter: {
     ...
@@ -1121,7 +1121,7 @@ planaria.start({
 
 ### 2. Create Planaria-specific Bitbus from Scratch
 
-Use the `filter` attribute to create a Bitbus from scratch, and connect to it.
+Use `filter` to create a Bitbus from scratch, and connect to it.
 
 You can even use `host.bitbus` to customize the Bitbus host node service to connect to.
 
@@ -1143,7 +1143,7 @@ planaria.start({
 
 ### 3. Advanced Bitbus Map Function
 
-You can use the [l.map](https://bitbus.network/docs#/?id=_2-advanced-bus) function to transform incoming events BEFORE storing to Bitbus. Neon Planaria will then consume the transformed data from Bitbus.
+Use [l.map](https://bitbus.network/docs#/?id=_2-advanced-bus) function to transform incoming events BEFORE storing to Bitbus. Neon Planaria will then consume the transformed data from Bitbus.
 
 > Pay attention to the "l.map" part below
 
